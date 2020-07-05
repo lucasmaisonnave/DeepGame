@@ -12,12 +12,12 @@ private:
 public:
     Timer();
     ~Timer();
-    void start();
-    void stop();
-    void restart();
+    void Timer_start();
+    void Timer_stop();
+    void Timer_restart();
     //retourne la valeur du timer en milliseconde
-    Uint32 getTime() const; 
-    bool IsRunning() const;
+    Uint32 Timer_getTime() const; 
+    bool Timer_IsRunning() const;
 
 };
 

@@ -5,6 +5,28 @@ Sprite::Sprite() :Sprite_Texture(nullptr), Statut(UNDEFINED)
 Sprite::Sprite(const int _Statut):  Sprite_Texture(nullptr), Statut(_Statut)
 {}
 
+Sprite::Sprite(std::string FileName, int _x, int _y, const int _Statut, SDL_Renderer* _Main_Renderer)
+{
+    SDL_Surface* Surface = IMG_Load(FileName.c_str());
+    if(Surface)
+    {
+        Sprite_Texture = SDL_CreateTextureFromSurface(_Main_Renderer,Surface);
+        if(Sprite_Texture)
+        {
+            hitbox->w = Surface->w;
+            hitbox->h = Surface->h;
+            pos_x = _x;
+            pos_y = _y;
+            Update_Hitbox();
+        }
+        else
+            SDL_Log("Unable to create texture : %s", SDL_GetError());
+    }
+    else
+        SDL_Log("Unable to load image : %s", SDL_GetError());
+    
+}
+
 Sprite::~Sprite()
 {
     hitbox = nullptr; 
@@ -26,6 +48,14 @@ void Sprite::setSprite_Statut(const int _Statut)
 {
     Statut = _Statut;
 }
+
+void Sprite::setHitbox_wh(int _w, int _h)
+{
+    hitbox->h = _h;
+    hitbox->w = _w;
+}
+
+
 SDL_Texture* Sprite::getSprite_Texture()
 {
     return Sprite_Texture;

@@ -12,6 +12,7 @@
 #include <SDL2/SDL_video.h>      // SDL2
 #include <SDL2/SDL_image.h>      // SDL2_Image
 #include <SDL2/SDL_ttf.h>        // SDL2_TTF
+#include <jsoncpp/json/json.h>  //Pour lire les fichier json
 
 #include "Window.h"
 #include "Animation.h"
@@ -19,7 +20,8 @@
 #include "Evenement.h"
 #include "Sprite.h"
 #include "Game.h"
-#include "Movable_Object.h"
+#include "Walls.h"
+#include "Player.h"
 
 
 

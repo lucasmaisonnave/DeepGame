@@ -1,5 +1,6 @@
 #ifndef EVENEMENT_H
 #define EVENEMENT_H
+#include "deepg.h"
 
 enum KEYS{  KEY_UP = 0, KEY_DOWN = 1,
             KEY_FORWARD = 0, KEY_BACKWARD, KEY_LEFT, KEY_RIGHT,

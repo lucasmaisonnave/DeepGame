@@ -2,7 +2,7 @@
 
 
 
-Game::Game(): currentNbMovObject(0), Window::Window(), Timer::Timer(), Evenement::Evenement()
+Game::Game(): Window::Window(), Timer::Timer(), Evenement::Evenement()
 {}
 Game::~Game()
 {}
@@ -12,57 +12,50 @@ void Game::run()
     this->setBackground(FILE_BACKGROUND);
     this->RenderBackground();
 
-    this->addMovableObject(Main_Renderer,FPS_ANIMATION, FILE_PERSONNAGE, JOUEUR); //Ajoute un joueur
-    TabMovObject[ind_joueur]->Update_Object();
-    this->RenderCopy_Texture(TabMovObject[ind_joueur]->getSprite_Texture(), NULL, TabMovObject[ind_joueur]->getSprite_Hitbox());
-    TabMovObject[ind_joueur]->printMovable_Object();
+    Player player(Main_Renderer, FPS_ANIMATION);
+    Walls murs(Main_Renderer);
+    murs.addWall("../images/frames/wall_mid.png", 200,100);
+    
+    murs.render();
+    player.Update_Player();
+
     this->update_Window();
 
-
-
-    //SDL_Delay(5000);
     while(!this->quit)
     {
-        this->restart();    //Restart du Timer
+        this->Timer_getTime();    //Restart du Timer
         this->UpdateEvent();
         
         if(this->IsKeyPressed(KEY_DOWN,KEY_RIGHT))
-            TabMovObject[ind_joueur]->setVitesseX(VITESSE_PERSONNAGE/FPS);
+            player.setVitesseX(VITESSE_PERSONNAGE/FPS);
         if(this->IsKeyPressed(KEY_DOWN,KEY_LEFT))
-            TabMovObject[ind_joueur]->setVitesseX(-VITESSE_PERSONNAGE/FPS);
+            player.setVitesseX(-VITESSE_PERSONNAGE/FPS);
         if(this->IsKeyPressed(KEY_UP,KEY_RIGHT))
-            TabMovObject[ind_joueur]->setVitesseX(0);
+            player.setVitesseX(0);
         if(this->IsKeyPressed(KEY_UP,KEY_LEFT))
-            TabMovObject[ind_joueur]->setVitesseX(0);
+            player.setVitesseX(0);
 
         if(this->IsKeyPressed(KEY_DOWN,KEY_BACKWARD))
-            TabMovObject[ind_joueur]->setVitesseY(VITESSE_PERSONNAGE/FPS);
+            player.setVitesseY(VITESSE_PERSONNAGE/FPS);
         if(this->IsKeyPressed(KEY_DOWN,KEY_FORWARD))
-            TabMovObject[ind_joueur]->setVitesseY(-VITESSE_PERSONNAGE/FPS);
+            player.setVitesseY(-VITESSE_PERSONNAGE/FPS);
         if(this->IsKeyPressed(KEY_UP,KEY_BACKWARD))
-            TabMovObject[ind_joueur]->setVitesseY(0);
+            player.setVitesseY(0);
         if(this->IsKeyPressed(KEY_UP,KEY_FORWARD))
-            TabMovObject[ind_joueur]->setVitesseY(0);
+            player.setVitesseY(0);
 
         this->RenderBackground();                   //On remet le background
-        TabMovObject[ind_joueur]->Update_Object();  //On actualise la texture du personnage
+        player.Update_Player();  //On actualise la texture du personnage
 
-        this->RenderCopy_Texture(TabMovObject[ind_joueur]->getSprite_Texture(), NULL, TabMovObject[ind_joueur]->getSprite_Hitbox());
+        murs.render();
         this->update_Window();                       //On affiche les changements à l'écran
-        int delta_time = (1.0/FPS)*1000 - this->getTime();
+        int delta_time = (1.0/FPS)*1000 - this->Timer_getTime();
         //std::cout << delta_time << std::endl;
         if(delta_time > 0)
             SDL_Delay(delta_time);
     }
 }
 
-void Game::addMovableObject(SDL_Renderer* _Main_Renderer, int _framerate, std::string _AnimFile, const int _Statut)
-{
-    TabMovObject[currentNbMovObject] = new Movable_Object(_Main_Renderer, _framerate,_AnimFile, _Statut);
-    if(_Statut == JOUEUR)
-        ind_joueur = currentNbMovObject;
-    currentNbMovObject++;
-}
 
 void Game::setBackground(std::string _file_background)
 {
@@ -79,4 +72,24 @@ void Game::setBackground(std::string _file_background)
 void Game::RenderBackground() const
 {
     SDL_RenderCopy(Main_Renderer, background, NULL, NULL);
+}
+
+void Load_level(int numero_level)
+{
+    std::ifstream ifs("../level/level" + std::to_string(numero_level) + ".json" );
+    Json::Reader reader;
+    Json::Value level;
+    reader.parse(ifs, level);
+    const Json::Value& joueur = level["Joueur"]; 
+    const Json::Value& walls = level["Walls"];
+    const Json::Value& sol = level["Sol"];
+    const Json::Value& piques = level["Piques"];
+    const Json::Value& canon = level["Canon"];
+    const Json::Value& fin = level["Fin"];
+    
+    
+
+    /*std::cout << " x: " << joueur["x"].asInt();
+    std::cout << " y: " << joueur["y"].asInt();
+    std::cout << std::endl;*/
 }

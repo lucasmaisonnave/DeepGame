@@ -1,70 +1,45 @@
 #include "deepg.h"
-#include "Sprite.h"
 
-Animation::Animation(SDL_Renderer* _Main_Renderer, int _framerate, std::string _AnimFile, const int _Statut) : Main_Renderer(_Main_Renderer), AnimFile(_AnimFile), framerate(_framerate), frame(0), direction_x(DROITE), direction_y(DROITE),
-Sprite::Sprite(_Statut)
+Animation::Animation(SDL_Renderer* _Main_Renderer, int _framerate, std::string _AnimFile, Sprite* _sprite): Main_Renderer(_Main_Renderer), framerate(_framerate), AnimFile(_AnimFile), sprite(_sprite)
 {
-    SDL_Surface* Surface = nullptr;
-    for(int i = 0; i<2; i++)
+    int i = 0;
+    SDL_Surface* Surface = IMG_Load((AnimFile + std::to_string(i) + ".png").c_str());
+    SDL_Texture* texture;
+    sprite->setHitbox_wh(Surface->w, Surface->h);
+    while(Surface)
     {
-        std::string direction = "/droite";
-        std::string run = "/run_";
-        if(i != 0)
-            direction = "/gauche";
-        for(int j = 0; j<IPA; j++)
+        texture = SDL_CreateTextureFromSurface(Main_Renderer,Surface);
+        if(texture)
         {
-            std::string nbr = "f"+std::to_string(j);
-            Surface = IMG_Load((AnimFile + direction + run + nbr + ".png").c_str());    //Nom du fichier ../images/personnage/droite/run_f0.png par exemple
-            if(Surface)
-            {
-                TabAnim[i][j] = SDL_CreateTextureFromSurface(Main_Renderer,Surface);
-                if(TabAnim[i][j] == NULL)
-                    SDL_Log("Unable to create texture : %s", SDL_GetError());
-            }
-            else
-                SDL_Log("Unable to load image : %s", SDL_GetError());
-            
-        } 
+            Textures.push_back(texture);
+            i++;
+            Surface = IMG_Load((AnimFile + std::to_string(i) + ".png").c_str());
+        }
+        else
+            SDL_Log("Unable to create texture : %s", SDL_GetError());
+        
     }
-    hitbox->h = Surface->h;
-    hitbox->w = Surface->w;
-    pos_x = SPAWN_X;
-    pos_y = SPAWN_Y;
-    Update_Hitbox();
-    this->setSprite_Texture(TabAnim[DROITE][0]);
-    SDL_FreeSurface(Surface);
 }
-
-Animation::Animation() : AnimFile(""), framerate(0), frame(0), direction_x(DROITE), direction_y(HAUT)
+Animation::Animation() : Main_Renderer(nullptr), framerate(0), AnimFile(""), sprite(nullptr)
 {}
 
 Animation::~Animation()
 {
-    for(int i = 0; i<2; i++)
-        for(int j = 0; j<IPA; j++)
-            SDL_DestroyTexture(TabAnim[i][j]);
+    for(int i = 0; i < Textures.size(); i++)
+        SDL_DestroyTexture(Textures[i]);
 }
+
 
 void Animation::Update_Texture()
 {
-    if(!this->timer.IsRunning())
-        this->timer.restart();
-    if(this->timer.getTime() >= (1.0/framerate)*1000)
+    if(!this->Timer_IsRunning())
+        this->Timer_restart();
+    if(this->Timer_getTime() >= (1.0/framerate)*1000)
     {
-        this->timer.restart();
+        this->Timer_restart();
         frame++;
-        if(frame >= IPA || statique) //Soit on loop l'animation soit on est statique
+        if(frame >= Textures.size() || statique) //Soit on loop l'animation soit on est statique
             frame = 0;
     }
-    this->setSprite_Texture(TabAnim[direction_x][frame]);
-}
-
-void Animation::setDirectionX(int _direction_x)
-{
-    direction_x = _direction_x;
-}
-
-void Animation::setDirectionY(int _direction_y)
-{
-    direction_y = _direction_y;
+    sprite->setSprite_Texture(Textures[frame]);
 }

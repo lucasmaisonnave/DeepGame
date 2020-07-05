@@ -7,6 +7,6 @@ PSE_INCL_DIR = ${PSE_DIR}/include
 
 CFLAGS = -g -I. -I${PSE_INCL_DIR} -Wall -std=c++0x
 		
-LDLIBS = -L${PSE_LIB} -ldeepG -lm -pthread -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image
+LDLIBS = -L${PSE_LIB} -ldeepG -lm -pthread -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -ljsoncpp
 
 CC = g++
