@@ -2,7 +2,8 @@
 #define WINDOW_H
 #include "deepg.h"
 
-
+#define WIN_WIDTH 1200
+#define WIN_HEIGHT 720
 
 class Window
 {

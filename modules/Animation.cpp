@@ -43,3 +43,4 @@ void Animation::Update_Texture()
     }
     sprite->setSprite_Texture(Textures[frame]);
 }
+

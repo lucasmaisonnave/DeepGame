@@ -27,6 +27,7 @@ public:
         Update la texture du sprite
     */
     bool statique = true;           //Si vrai l'animation reste sur la première image
+    
     void Update_Texture();
 
 };

@@ -6,12 +6,17 @@
 #include "deepg.h"
 
 
-Window::Window() : Main_Window(nullptr), Main_Renderer(nullptr), title("DeepGame")
+Window::Window() : title("DeepGame")
 {
-    if(SDL_CreateWindowAndRenderer(1200, 720, 0, &Main_Window, &Main_Renderer) != 0)
+    /*if(SDL_CreateWindowAndRenderer(1200, 720, SDL_TEXTUREACCESS_TARGET, &Main_Window, &Main_Renderer) != 0)
         SDL_Log("Unable to initialize Window and Renderer : %s", SDL_GetError());
     if(Main_Window)
-		SDL_SetWindowTitle(Main_Window, title.c_str());
+		SDL_SetWindowTitle(Main_Window, title.c_str());*/
+
+	Main_Window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED, WIN_WIDTH, WIN_HEIGHT, 0);
+	Main_Renderer = SDL_CreateRenderer(Main_Window, -1,
+		SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 }
 
 Window::~Window()

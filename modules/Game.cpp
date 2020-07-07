@@ -3,21 +3,19 @@
 
 
 Game::Game(): Window::Window(), Timer::Timer(), Evenement::Evenement()
-{}
+{
+    this->setBackground(FILE_BACKGROUND);
+    Load_level(1);
+}
 Game::~Game()
 {}
 void Game::run()
 {
-    
-    this->setBackground(FILE_BACKGROUND);
     this->RenderBackground();
-
-    Player player(Main_Renderer, FPS_ANIMATION);
-    Walls murs(Main_Renderer);
-    murs.addWall("../images/frames/wall_mid.png", 200,100);
     
-    murs.render();
-    player.Update_Player();
+    
+    //murs->render();
+    player->Update_Player();
 
     this->update_Window();
 
@@ -27,27 +25,26 @@ void Game::run()
         this->UpdateEvent();
         
         if(this->IsKeyPressed(KEY_DOWN,KEY_RIGHT))
-            player.setVitesseX(VITESSE_PERSONNAGE/FPS);
+            player->setVitesseX(VITESSE_PERSONNAGE/FPS);
         if(this->IsKeyPressed(KEY_DOWN,KEY_LEFT))
-            player.setVitesseX(-VITESSE_PERSONNAGE/FPS);
+            player->setVitesseX(-VITESSE_PERSONNAGE/FPS);
         if(this->IsKeyPressed(KEY_UP,KEY_RIGHT))
-            player.setVitesseX(0);
+            player->setVitesseX(0);
         if(this->IsKeyPressed(KEY_UP,KEY_LEFT))
-            player.setVitesseX(0);
+            player->setVitesseX(0);
 
         if(this->IsKeyPressed(KEY_DOWN,KEY_BACKWARD))
-            player.setVitesseY(VITESSE_PERSONNAGE/FPS);
+            player->setVitesseY(VITESSE_PERSONNAGE/FPS);
         if(this->IsKeyPressed(KEY_DOWN,KEY_FORWARD))
-            player.setVitesseY(-VITESSE_PERSONNAGE/FPS);
+            player->setVitesseY(-VITESSE_PERSONNAGE/FPS);
         if(this->IsKeyPressed(KEY_UP,KEY_BACKWARD))
-            player.setVitesseY(0);
+            player->setVitesseY(0);
         if(this->IsKeyPressed(KEY_UP,KEY_FORWARD))
-            player.setVitesseY(0);
+            player->setVitesseY(0);
 
         this->RenderBackground();                   //On remet le background
-        player.Update_Player();  //On actualise la texture du personnage
+        player->Update_Player();  //On actualise la texture du personnage
 
-        murs.render();
         this->update_Window();                       //On affiche les changements à l'écran
         int delta_time = (1.0/FPS)*1000 - this->Timer_getTime();
         //std::cout << delta_time << std::endl;
@@ -74,7 +71,7 @@ void Game::RenderBackground() const
     SDL_RenderCopy(Main_Renderer, background, NULL, NULL);
 }
 
-void Load_level(int numero_level)
+void Game::Load_level(int numero_level)
 {
     std::ifstream ifs("../level/level" + std::to_string(numero_level) + ".json" );
     Json::Reader reader;
@@ -86,10 +83,36 @@ void Load_level(int numero_level)
     const Json::Value& piques = level["Piques"];
     const Json::Value& canon = level["Canon"];
     const Json::Value& fin = level["Fin"];
+    /*  
+        Pour créer les murs on utilise la syntaxe suivant de le .json:
+        x et y sont les positions du premier mur à mettre
+        nb_x représente le nombre de murs à ajouter selon x
+        nb_y de même pour y
+        type est le nom du fichier de texture des murs à ajouter
+    */
+    murs = new Walls(Main_Renderer, background);
     
+    for(int i = 0; i < walls.size(); i++)
+    {
+        int x = walls[i]["x"].asInt();
+        int y = walls[i]["y"].asInt();
+        int nb_x = walls[i]["nb_x"].asInt();
+        int nb_y = walls[i]["nb_y"].asInt();
+        std::string type = walls[i]["type"].asString();
+
+        Sprite* pattern = murs->addWall(FOLDER_WALLS + type, x, y);
+        int h = pattern->getSprite_Hitbox()->h;
+        int w = pattern->getSprite_Hitbox()->w;
+        for(int j = 1; j < nb_x; j++)
+            murs->addWall(FOLDER_WALLS + type, x + j*w, y);
+        
+        for(int k = 1; k < nb_y; k++)
+            murs->addWall(FOLDER_WALLS + type, x, y + k*h);
+    }
+    /*Ici on créer le background contenant le fond de base plus les murs*/
+    
+    
+    player = new Player(Main_Renderer, murs, FPS_ANIMATION, joueur["x"].asInt(), joueur["y"].asInt());
     
 
-    /*std::cout << " x: " << joueur["x"].asInt();
-    std::cout << " y: " << joueur["y"].asInt();
-    std::cout << std::endl;*/
 }
