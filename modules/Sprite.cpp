@@ -5,25 +5,34 @@ Sprite::Sprite() :Sprite_Texture(nullptr), Statut(UNDEFINED)
 Sprite::Sprite(const int _Statut):  Sprite_Texture(nullptr), Statut(_Statut)
 {}
 
-Sprite::Sprite(std::string FileName, int _x, int _y, const int _Statut, SDL_Renderer* _Main_Renderer)
+Sprite::Sprite(std::string FileName, int _x, int _y, const int _Statut, SDL_Renderer* _Main_Renderer) : Main_Renderer(_Main_Renderer), Statut(_Statut)
 {
     SDL_Surface* Surface = IMG_Load(FileName.c_str());
     if(Surface)
     {
-        Sprite_Texture = SDL_CreateTextureFromSurface(_Main_Renderer,Surface);
-        if(Sprite_Texture)
+        Surface = SDL_ConvertSurfaceFormat(Surface, PIXEL_FORMAT, 0);
+        if(Surface)
         {
-            hitbox->w = Surface->w;
-            hitbox->h = Surface->h;
-            pos_x = _x;
-            pos_y = _y;
-            Update_Hitbox();
+            Sprite_Texture = SDL_CreateTextureFromSurface(_Main_Renderer,Surface);
+            if(Sprite_Texture)
+            {
+                pixels = Surface->pixels;
+                pitch = Surface->pitch;
+                hitbox->w = Surface->w;
+                hitbox->h = Surface->h;
+                pos_x = _x;
+                pos_y = _y;
+                Update_Hitbox();
+            }
+            else
+                SDL_Log("Unable to create texture : %s", SDL_GetError());
         }
         else
-            SDL_Log("Unable to create texture : %s", SDL_GetError());
+            SDL_Log("Unable to convert pixel format : %s", SDL_GetError());
     }
     else
         SDL_Log("Unable to load image : %s", SDL_GetError());
+    
     
 }
 
@@ -85,4 +94,19 @@ void Sprite::Update_Hitbox()
 {
     hitbox->x = (int)pos_x;
     hitbox->y = (int)pos_y;
+}
+
+void *Sprite::getPixels() const
+{
+    return pixels;
+}
+
+int Sprite::getPitch() const
+{
+    return pitch;
+}
+
+int Sprite::getStatut() const
+{
+    return Statut;
 }

@@ -2,7 +2,7 @@
 
 Player::Player(SDL_Renderer* _Main_Renderer,Walls* _murs, int _framerate, int _spawn_x, int _spawn_y) : Main_Renderer(_Main_Renderer), murs(_murs), Sprite::Sprite(JOUEUR), spawn_x(_spawn_x), spawn_y(_spawn_y)
 {
-    Anim_Run = new Animation(Main_Renderer, _framerate, "../images/personnage/run_f", this);
+    Anim_Run = new Animation(Main_Renderer, _framerate, PLAYER_FILE, this);
     Anim_Run->Update_Texture();  //On initialise le joueur avec la texture de droite
     this->pos_x = spawn_x;
     this->pos_y = spawn_y;
@@ -43,13 +43,9 @@ void Player::Update_Player()
         this->setDirectionY(HAUT);
 
     if(vitesse_y == 0 && vitesse_x == 0)
-    {
         Anim_Run->statique = true;
-    }
     else
-    {
         Anim_Run->statique = false;
-    }
     
     
     /*Mise à jour de la position*/
@@ -77,8 +73,6 @@ void Player::Update_Player()
         Anim_Run->Update_Texture();
         flip = SDL_FLIP_VERTICAL;
     }
-    
-    
     this->render();
 }
 

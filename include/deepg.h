@@ -23,6 +23,7 @@
 #include "Walls.h"
 #include "Player.h"
 #include "Fonctions.h"
+#include "Spikes.h"
 
 
 

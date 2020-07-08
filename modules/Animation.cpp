@@ -1,6 +1,6 @@
 #include "deepg.h"
 
-Animation::Animation(SDL_Renderer* _Main_Renderer, int _framerate, std::string _AnimFile, Sprite* _sprite): Main_Renderer(_Main_Renderer), framerate(_framerate), AnimFile(_AnimFile), sprite(_sprite)
+Animation::Animation(SDL_Renderer* _Main_Renderer, float _framerate, std::string _AnimFile, Sprite* _sprite): Main_Renderer(_Main_Renderer), framerate(_framerate), AnimFile(_AnimFile), sprite(_sprite)
 {
     int i = 0;
     SDL_Surface* Surface = IMG_Load((AnimFile + std::to_string(i) + ".png").c_str());
@@ -34,6 +34,7 @@ void Animation::Update_Texture()
 {
     if(!this->Timer_IsRunning())
         this->Timer_restart();
+    
     if(this->Timer_getTime() >= (1.0/framerate)*1000)
     {
         this->Timer_restart();
@@ -42,5 +43,15 @@ void Animation::Update_Texture()
             frame = 0;
     }
     sprite->setSprite_Texture(Textures[frame]);
+}
+
+SDL_Texture* Animation::getCurrent_Texture()
+{   
+    return sprite->getSprite_Texture();
+}
+
+SDL_Rect* Animation::getCurrent_Hitbox()
+{
+    return sprite->getSprite_Hitbox();
 }
 

@@ -4,10 +4,10 @@
         {"x": 100, "y":200, "nb_x": 10, "nb_y":12, "type":"wall_mid.png"}
     ],
     "Sol": [
-        {"x": 220, "y":200, "h": 50, "w":320}
+        {"x": 550, "y":200, "nb_w": 3, "nb_h":4, "type":"floor_1.png"}
     ],
-    "Piques": [
-        {"x": 100, "y":200}
+    "Spikes": [
+        {"x": 320, "y":440, "type": "floor_spikes_anim_f"}
     ],
     "Canon": [
         {"x": 100, "y":200}

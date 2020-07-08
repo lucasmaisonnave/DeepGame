@@ -4,6 +4,8 @@
 #include "deepg.h"
 #include "Walls.h"
 
+#define PLAYER_FILE "../images/personnage/run_f"
+
 class Player : public Sprite
 {
 private:
@@ -15,6 +17,8 @@ private:
 
     int direction_x = DROITE;
     int direction_y = HAUT;
+
+    bool alive = true;
 
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 

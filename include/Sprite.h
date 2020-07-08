@@ -3,7 +3,7 @@
 
 #include "deepg.h"
 
-enum STATUT_SPRITE {UNDEFINED, WALL, ENNEMIE, JOUEUR, MOVABLE, END};
+enum STATUT_SPRITE {UNDEFINED, WALL, SOL, ENNEMIE, JOUEUR, MOVABLE, END};
 
 #define SPAWN_X 500 //Coordonnées du spaw des sprite
 #define SPAWN_Y 400
@@ -11,14 +11,16 @@ enum STATUT_SPRITE {UNDEFINED, WALL, ENNEMIE, JOUEUR, MOVABLE, END};
 class Sprite
 {
 protected:
+    SDL_Renderer* Main_Renderer;
     SDL_Texture* Sprite_Texture;
     unsigned short int Statut;
     SDL_Rect* hitbox = new SDL_Rect;
+    void *pixels = nullptr;
+    int pitch = 0;
     float pos_x;     //Position mais en float
     float pos_y;  
     
     void setSprite_Hitbox(SDL_Rect* _hitbox);
-    
     void setSprite_Statut(const int _Statut);
 public:
     Sprite();
@@ -31,6 +33,9 @@ public:
     void setSprite_Texture(SDL_Texture* _Sprite_Texture);
     void printSprite() const;
     void Update_Hitbox();    //Met à jour la position de la hitbox en fonction de pos_x et pos_y
+    void *getPixels() const;
+    int getPitch() const;
+    int getStatut() const;
 };
 
 #endif

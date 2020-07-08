@@ -11,8 +11,8 @@ Sprite* Walls::addWall(std::string FileName, int pos_x, int pos_y)
     Sprite* mur = new Sprite(FileName, pos_x, pos_y, WALL, Main_Renderer);
     if(mur)
     {
-        this->addWallToBackground(mur);
         walls.push_back(mur);
+        this->addWallToBackground(mur);
     }
     return mur;
 }
@@ -44,17 +44,13 @@ int Walls::size()
 
 void Walls::addWallToBackground(Sprite* wall)
 {
-    Uint32 format_pixels_wall, format_pixels_background;
-    SDL_Surface *surface = NULL;
-    void *pixels = NULL;
-    int pitch, w, h;
-    SDL_QueryTexture(wall->getSprite_Texture(), &format_pixels_wall, NULL, &w, &h);
-    SDL_QueryTexture(background, &format_pixels_background, NULL, &w, &h);
-    std::cout << "format_pixels_wall : " << format_pixels_wall << std::endl << "format_pixels_background : " << format_pixels_background << std::endl;
-
-    SDL_LockTexture(wall->getSprite_Texture(), NULL, &pixels, &pitch);
-
-    if(SDL_UpdateTexture(background, wall->getSprite_Hitbox(), pixels, pitch) == -1)
-        SDL_Log("Update du background : %s", SDL_GetError());
-    SDL_UnlockTexture(wall->getSprite_Texture());
+    SDL_Texture* Wall_Texture = wall->getSprite_Texture();
+    if(Wall_Texture)
+    {
+        if(SDL_UpdateTexture(background, wall->getSprite_Hitbox(), wall->getPixels(), wall->getPitch()) == -1)
+            SDL_Log("Update du background : %s", SDL_GetError());
+    }
+    else
+        SDL_Log("Wall texture est vide");
+    
 }
