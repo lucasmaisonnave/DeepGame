@@ -1,6 +1,6 @@
 #include "deepg.h"
 
-Animation::Animation(SDL_Renderer* _Main_Renderer, float _framerate, std::string _AnimFile, Sprite* _sprite): Main_Renderer(_Main_Renderer), framerate(_framerate), AnimFile(_AnimFile), sprite(_sprite)
+Animation::Animation(SDL_Renderer* _Main_Renderer, float _framerate, std::string _AnimFile, Sprite* _sprite, bool random_frame): Main_Renderer(_Main_Renderer), framerate(_framerate), AnimFile(_AnimFile), sprite(_sprite)
 {
     int i = 0;
     SDL_Surface* Surface = IMG_Load((AnimFile + std::to_string(i) + ".png").c_str());
@@ -17,7 +17,14 @@ Animation::Animation(SDL_Renderer* _Main_Renderer, float _framerate, std::string
         }
         else
             SDL_Log("Unable to create texture : %s", SDL_GetError());
-        
+    }
+    /*La frame de départ est choisi au hasard*/
+    if(random_frame)
+    {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(1,(int)Textures.size()-1);
+        frame = dis(gen);
     }
 }
 Animation::Animation() : Main_Renderer(nullptr), framerate(0), AnimFile(""), sprite(nullptr)
@@ -55,3 +62,7 @@ SDL_Rect* Animation::getCurrent_Hitbox()
     return sprite->getSprite_Hitbox();
 }
 
+short unsigned int Animation::getFrame() const
+{
+ return frame;
+}

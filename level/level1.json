@@ -7,7 +7,8 @@
         {"x": 550, "y":200, "nb_w": 3, "nb_h":4, "type":"floor_1.png"}
     ],
     "Spikes": [
-        {"x": 320, "y":440, "type": "floor_spikes_anim_f"}
+        {"x": 320, "y":440, "type": "floor_spikes_anim_f"},
+        {"x": 320, "y":460, "type": "floor_spikes_anim_f"}
     ],
     "Canon": [
         {"x": 100, "y":200}

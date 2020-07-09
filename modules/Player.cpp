@@ -2,7 +2,7 @@
 
 Player::Player(SDL_Renderer* _Main_Renderer,Walls* _murs, int _framerate, int _spawn_x, int _spawn_y) : Main_Renderer(_Main_Renderer), murs(_murs), Sprite::Sprite(JOUEUR), spawn_x(_spawn_x), spawn_y(_spawn_y)
 {
-    Anim_Run = new Animation(Main_Renderer, _framerate, PLAYER_FILE, this);
+    Anim_Run = new Animation(Main_Renderer, _framerate, PLAYER_FILE, this, false);
     Anim_Run->Update_Texture();  //On initialise le joueur avec la texture de droite
     this->pos_x = spawn_x;
     this->pos_y = spawn_y;
@@ -83,4 +83,14 @@ void Player::render()
         SDL_RenderCopyEx(Main_Renderer, this->getSprite_Texture(), NULL, this->getSprite_Hitbox(),0, NULL, flip);
     else
         SDL_RenderCopyEx(Main_Renderer, this->getSprite_Texture(), NULL, this->getSprite_Hitbox(),180, NULL, flip);
+}
+
+void Player::die()
+{
+    alive = false;
+}
+
+bool Player::IsAlive() const
+{
+    return alive;
 }

@@ -4,6 +4,7 @@
 #include <stdint.h> // uint8_t
 #include <string>
 #include <map>
+#include <random>
 #include <iostream>
 #include <fstream>
 #include <sstream>

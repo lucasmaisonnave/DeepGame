@@ -5,48 +5,25 @@
 Game::Game(): Window::Window(), Timer::Timer(), Evenement::Evenement()
 {
     this->setBackground(FILE_BACKGROUND);
-    Load_level(1);
+    Load_level(current_level);
 }
 Game::~Game()
 {}
 void Game::run()
 {
-    this->RenderBackground();
-    player->Update_Player();
-    this->update_Window();
+    this->Update_Image();
 
     while(!this->quit)
     {
-        this->Timer_getTime();    //Restart du Timer
-        this->UpdateEvent();
-        
-        if(this->IsKeyPressed(KEY_DOWN,KEY_RIGHT))
-            player->setVitesseX(VITESSE_PERSONNAGE/FPS);
-        if(this->IsKeyPressed(KEY_DOWN,KEY_LEFT))
-            player->setVitesseX(-VITESSE_PERSONNAGE/FPS);
-        if(this->IsKeyPressed(KEY_UP,KEY_RIGHT))
-            player->setVitesseX(0);
-        if(this->IsKeyPressed(KEY_UP,KEY_LEFT))
-            player->setVitesseX(0);
-
-        if(this->IsKeyPressed(KEY_DOWN,KEY_BACKWARD))
-            player->setVitesseY(VITESSE_PERSONNAGE/FPS);
-        if(this->IsKeyPressed(KEY_DOWN,KEY_FORWARD))
-            player->setVitesseY(-VITESSE_PERSONNAGE/FPS);
-        if(this->IsKeyPressed(KEY_UP,KEY_BACKWARD))
-            player->setVitesseY(0);
-        if(this->IsKeyPressed(KEY_UP,KEY_FORWARD))
-            player->setVitesseY(0);
-
-        this->RenderBackground();                   //On remet le background
-        spikes->Update_Spikes();
-        player->Update_Player();  //On actualise la texture du personnage
-
-        this->update_Window();                       //On affiche les changements à l'écran
-        int delta_time = (1.0/FPS)*1000 - this->Timer_getTime();
+        this->Timer_restart();    //Restart du Timer
+        this->Update_Inputs();
+        this->Update_Image();
+        delta_time = (1.0/FPS)*1000 - this->Timer_getTime();
         //std::cout << delta_time << std::endl;
         if(delta_time > 0)
             SDL_Delay(delta_time);
+        if(!player->IsAlive())
+            Load_level(current_level);
     }
 }
 
@@ -68,7 +45,7 @@ void Game::setBackground(std::string _file_background)
     
 }
 
-void Game::RenderBackground() const
+void Game::RenderBackground()
 {
     SDL_RenderCopy(Main_Renderer, background, NULL, NULL);
 }
@@ -112,6 +89,8 @@ void Game::Load_level(int numero_level)
         for(int k = 1; k < nb_y; k++)
             murs->addWall(FOLDER_FRAME + type, x, y + k*h);
     }
+    /*--------ON ajoute le player--------*/
+    player = new Player(Main_Renderer, murs, FPS_ANIMATION_PLAYER, joueur_data["x"].asInt(), joueur_data["y"].asInt());
     /*--------On ajoute le sol-------*/
     for(int i = 0; i < sol_data.size(); i++)
     {
@@ -137,7 +116,7 @@ void Game::Load_level(int numero_level)
         }
     }
     /*--------On ajoutes les spikes--------*/
-    spikes = new Spikes(Main_Renderer);
+    spikes = new Spikes(Main_Renderer, player);
     for(int i = 0; i < spikes_data.size(); i++)
     {
         int x = spikes_data[i]["x"].asInt();
@@ -145,7 +124,7 @@ void Game::Load_level(int numero_level)
         spikes->addSpike(x, y);
     }
 
-    player = new Player(Main_Renderer, murs, FPS_ANIMATION_PLAYER, joueur_data["x"].asInt(), joueur_data["y"].asInt());
+    
 }
 
 void Game::addSpriteToBackground(Sprite* sprite)
@@ -157,4 +136,35 @@ void Game::addSpriteToBackground(Sprite* sprite)
     }
     else
         SDL_Log("Sprite texture est vide");
+}
+
+void Game::Update_Image()
+{
+    this->RenderBackground();                   //On remet le background
+    spikes->Update_Spikes();                    //On actualise les textures des sprites
+    player->Update_Player();                    //On actualise la texture du personnage
+    this->update_Window();                      //On affiche les changements à l'écran
+}
+
+void Game::Update_Inputs()
+{
+    this->UpdateEvent();
+        
+    if(this->IsKeyPressed(KEY_DOWN,KEY_RIGHT))
+        player->setVitesseX(VITESSE_PERSONNAGE/FPS);
+    if(this->IsKeyPressed(KEY_DOWN,KEY_LEFT))
+            player->setVitesseX(-VITESSE_PERSONNAGE/FPS);
+    if(this->IsKeyPressed(KEY_UP,KEY_RIGHT))
+        player->setVitesseX(0);
+    if(this->IsKeyPressed(KEY_UP,KEY_LEFT))
+        player->setVitesseX(0);
+
+    if(this->IsKeyPressed(KEY_DOWN,KEY_BACKWARD))
+        player->setVitesseY(VITESSE_PERSONNAGE/FPS);
+    if(this->IsKeyPressed(KEY_DOWN,KEY_FORWARD))
+        player->setVitesseY(-VITESSE_PERSONNAGE/FPS);
+    if(this->IsKeyPressed(KEY_UP,KEY_BACKWARD))
+        player->setVitesseY(0);
+    if(this->IsKeyPressed(KEY_UP,KEY_FORWARD))
+        player->setVitesseY(0);
 }
