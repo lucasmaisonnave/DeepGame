@@ -42,3 +42,17 @@ query_texture_fail:
  
     return SDL_DisplayFormatAlpha(surface_a_copier);
 }*/
+
+SDL_bool SDL_IntersectionCircleRect(SDL_Rect* _rect, SDL_Circle* _circle)
+{
+    SDL_Point p = {_circle->x, _circle->y};
+    SDL_Point rect_center = {_rect->x + _rect->w/2, _rect->y + _rect->h/2};
+    return( SDL_PointInRect(&p, _rect) || 
+            SDL_PointInCircle(&rect_center, _circle) ||
+            ;
+}
+
+SDL_bool SDL_PointInCircle(SDL_Point* _point, SDL_Circle* _circle)
+{
+    return (std::pow(_point->x - _circle->x,2) + std::pow(_point->y - _circle->y,2) <= std::pow(_circle->r,2));
+}

@@ -1,7 +1,6 @@
 #include "deepg.h"
 
 
-
 Game::Game(): Window::Window(), Timer::Timer(), Evenement::Evenement()
 {
     this->setBackground(FILE_BACKGROUND);
