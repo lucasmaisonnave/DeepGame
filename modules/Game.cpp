@@ -34,7 +34,6 @@ void Game::setBackground(std::string _file_background)
     {   
         Surface = SDL_ConvertSurfaceFormat(Surface, PIXEL_FORMAT, 0);
         if(Surface)
-            
             background = SDL_CreateTextureFromSurface(Main_Renderer, Surface);
         else
             SDL_Log("Unable to convert pixel format : %s", SDL_GetError());
@@ -150,8 +149,9 @@ void Game::Update_Image()
 {
     this->RenderBackground();                   //On remet le background
     spikes->Update_Spikes();                    //On actualise les textures des sprites
-    player->Update_Player();                    //On actualise la texture du personnage
     sawblades->Update_SawBlades();
+    player->Update_Player();                    //On actualise la texture du personnage
+    
     this->update_Window();                      //On affiche les changements à l'écran
 }
 

@@ -45,37 +45,37 @@ query_texture_fail:
 
 bool SDL_IntersectionCircleRect(SDL_Rect* _rect, SDL_Circle* _circle)
 {
-    int x = _rect->x;
-    int y = _rect->y;
-    int w = _rect->w;
-    int h = _rect->h;
+    float x = _rect->x;
+    float y = _rect->y;
+    float w = _rect->w;
+    float h = _rect->h;
 
-    int a = _circle->x;
-    int b = _circle->y;
-    int r = _circle->r;
+    float a = _circle->x;
+    float b = _circle->y;
+    float r = _circle->r;
 
     for(int i = 0; i<2; i++)
     {
-        if(r - std::pow(x + i*w - a,2) >= 0)
+        if(std::pow(r,2) - std::pow(x + i*w - a,2) >= 0)
         {
-            if(y <= b + std::sqrt((r - std::pow(x + i*w - a,2))) <= y + h)
-                return SDL_TRUE;
-            if(y <= b - std::sqrt((r - std::pow(x + i*w - a,2))) <= y + h)
-                return SDL_TRUE;
+            if(y <= b + std::sqrt((std::pow(r,2) - std::pow(x + i*w - a,2))) && (b + std::sqrt((std::pow(r,2) - std::pow(x + i*w - a,2)))) <= y + h)
+                return true;
+            if(y <= b - std::sqrt((std::pow(r,2) - std::pow(x + i*w - a,2))) && b - std::sqrt((std::pow(r,2) - std::pow(x + i*w - a,2))) <= y + h)
+                return true;
         }
     }
 
     for(int i = 0; i<2; i++)
     {
-        if(r - std::pow(y + i*h - b,2) >= 0)
+        if(std::pow(r,2) - std::pow(y + i*h - b,2) >= 0)
         {
-            if(x <= a + std::sqrt((r - std::pow(y + i*h - b,2))) <= x + w)
-                return SDL_TRUE;
-            if(x <= a - std::sqrt((r - std::pow(y + i*h - b,2))) <= x + w)
-                return SDL_TRUE;
+            if(x <= a + std::sqrt((std::pow(r,2) - std::pow(y + i*h - b,2))) && a + std::sqrt((std::pow(r,2) - std::pow(y + i*h - b,2))) <= x + w)
+                return true;
+            if(x <= a - std::sqrt((std::pow(r,2) - std::pow(y + i*h - b,2))) && a - std::sqrt((std::pow(r,2) - std::pow(y + i*h - b,2))) <= x + w)
+                return true;
         }
     }    
-    return SDL_FALSE;
+    return false;
 }
 
 bool SDL_PointInCircle(SDL_Point* _point, SDL_Circle* _circle)

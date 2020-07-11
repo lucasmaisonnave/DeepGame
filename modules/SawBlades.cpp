@@ -11,8 +11,6 @@ Sprite::Sprite(FileName, _start_point->x , _start_point->y , _Statut, _Main_Rend
     this->Update_Hitbox();
 
     this->calcul_coef_vitesse();
-    this->printSprite();
-    std::cout << _start_point << std::endl;
     saw_hitbox->x = start_point->x;
     saw_hitbox->y = start_point->y;
     
@@ -53,8 +51,8 @@ void Saw::calcul_coef_vitesse()
     {
         a = (y2-y1)/(x2-x1);
         b = y1 - a*x1;
-        v_x = -sign(x1-x2)*Vitesse;
-        v_y = -sign(y1-y2)*Vitesse;
+        v_x = -sign(x1-x2)*Vitesse/(std::sqrt(std::pow(a,2)+1)); //v_x = V/sqrt(a^2+1)
+        v_y = a*v_x;
     }
     /*if(a != 0 && b != 0)
     {
@@ -90,7 +88,12 @@ void Saw::Update_Saw()
         v_y = -v_y;
     }
     this->Update_Hitbox();
-    if(SDL_RenderCopyEx(Main_Renderer, this->getSprite_Texture(), NULL, this->getSprite_Hitbox(), 1, NULL, SDL_FLIP_NONE) == -1)
+    saw_hitbox->x = this->hitbox->x + this->hitbox->w/2;
+    saw_hitbox->y = this->hitbox->y + this->hitbox->h/2;
+    angle += vitesse_rotation;
+    if(angle >= 180)
+        angle -= 180;
+    if(SDL_RenderCopyEx(Main_Renderer, this->getSprite_Texture(), NULL, this->getSprite_Hitbox(), angle, NULL, SDL_FLIP_NONE) == -1)
         SDL_Log("Unable to update Saw : %s", SDL_GetError());
 }
 

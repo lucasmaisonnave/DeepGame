@@ -6,7 +6,7 @@
 #include "Game.h"
 
 #define VITESSE_SAW 120.0   // °/s
-#define VITESSE_ROTATION 0.5  // °/s
+#define VITESSE_ROTATION 10  // °/s
 #define SAW_FILE "../images/frames/saw_blade.jpg"
 
 class Saw : public Sprite
@@ -17,6 +17,7 @@ protected:
     float v_y = 0;
     
     float vitesse_rotation =  VITESSE_ROTATION;   //En degré par frame
+    float angle = 0;
     /*Coéficients de la trajectoire : y = ax+b*/
     float a = 0;
     float b = 0;
@@ -56,6 +57,7 @@ private:
     std::vector<Saw*> sawblades;
     SDL_Renderer* Main_Renderer = nullptr;
     Player* player;
+    
 public:
     SawBlades(SDL_Renderer* _Main_Renderer, Player* _player);
     ~SawBlades();

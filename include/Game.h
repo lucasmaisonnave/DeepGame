@@ -7,7 +7,7 @@
 #include "Spikes.h"
 #include "SawBlades.h"
 
-#define FPS 60              //Images par seconde du jeu
+#define FPS 30              //Images par seconde du jeu
 #define FPS_ANIMATION_PLAYER 12     //Vitesse d'affichage des images des animations
 #define FPS_ANIMATION_SPIKE 1
 #define FILE_PERSONNAGE "../images/personnage"

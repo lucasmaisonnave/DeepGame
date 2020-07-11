@@ -1,17 +1,20 @@
 {
-    "Joueur": {"x" : 500, "y": 500},
+    "Joueur": {"x" : 120, "y": 250},
     "Walls": [
-        {"x": 100, "y":200, "nb_x": 10, "nb_y":12, "type":"wall_mid.png"}
+        {"x": 100, "y":200, "nb_x": 10, "nb_y":1, "type":"wall_mid.png"},
+        {"x": 84, "y":184, "nb_x": 11, "nb_y":1, "type":"wall_inner_corner_t_top_left.png"},
+        {"x": 84, "y":200, "nb_x": 1, "nb_y":1, "type":"wall_corner_left.png"},
+        {"x": 84, "y":216, "nb_x": 1, "nb_y":7, "type":"wall_side_mid_right.png"}
     ],
     "Sol": [
-        {"x": 550, "y":200, "nb_w": 3, "nb_h":4, "type":"floor_1.png"}
+        {"x": 89, "y":216, "nb_w": 12, "nb_h":12, "type":"floor_1.png"}
     ],
     "Spikes": [
         {"x": 320, "y":440, "type": "floor_spikes_anim_f"},
         {"x": 320, "y":460, "type": "floor_spikes_anim_f"}
     ],
     "Sawblades": [
-        {"start_x": 740, "start_y":200, "end_x": 450, "end_y": 620, "type" : "saw_blade.png"}
+        {"start_x": 680, "start_y":200, "end_x": 740, "end_y": 400, "type" : "saw_blade.png"}
     ],
     "Fin":{"x" : 20, "y": 620}
 }
