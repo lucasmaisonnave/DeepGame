@@ -59,7 +59,7 @@ void Game::Load_level(int numero_level)
     const Json::Value& walls_data = level["Walls"];
     const Json::Value& sol_data = level["Sol"];
     const Json::Value& spikes_data = level["Spikes"];
-    const Json::Value& canon_data = level["Canon"];
+    const Json::Value& sawblades_data = level["Sawblades"];
     const Json::Value& fin_datat = level["Fin"];
     /*  
         Pour créer les murs on utilise la syntaxe suivant de le .json:
@@ -122,7 +122,16 @@ void Game::Load_level(int numero_level)
         int y = spikes_data[i]["y"].asInt();
         spikes->addSpike(x, y);
     }
-
+    /*--------On ajoute les scies----------*/
+    sawblades = new SawBlades(Main_Renderer, player);
+    for(int i = 0; i < sawblades_data.size(); i++)
+    {
+        SDL_Point start_point = {sawblades_data[i]["start_x"].asInt(), sawblades_data[i]["start_y"].asInt()};
+        SDL_Point end_point = {sawblades_data[i]["end_x"].asInt(), sawblades_data[i]["end_y"].asInt()};
+        std::string type = sawblades_data[i]["type"].asString();
+        sawblades->addSaw(FOLDER_FRAME + type, &start_point, &end_point, VITESSE_SAW/FPS);
+    }
+    
     
 }
 
@@ -142,6 +151,7 @@ void Game::Update_Image()
     this->RenderBackground();                   //On remet le background
     spikes->Update_Spikes();                    //On actualise les textures des sprites
     player->Update_Player();                    //On actualise la texture du personnage
+    sawblades->Update_SawBlades();
     this->update_Window();                      //On affiche les changements à l'écran
 }
 

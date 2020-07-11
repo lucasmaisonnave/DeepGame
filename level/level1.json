@@ -10,8 +10,8 @@
         {"x": 320, "y":440, "type": "floor_spikes_anim_f"},
         {"x": 320, "y":460, "type": "floor_spikes_anim_f"}
     ],
-    "Canon": [
-        {"x": 100, "y":200}
+    "Sawblades": [
+        {"start_x": 740, "start_y":200, "end_x": 450, "end_y": 620, "type" : "saw_blade.png"}
     ],
     "Fin":{"x" : 20, "y": 620}
 }

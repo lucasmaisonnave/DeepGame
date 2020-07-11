@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Walls.h"
 #include "Spikes.h"
+#include "SawBlades.h"
 
 #define FPS 60              //Images par seconde du jeu
 #define FPS_ANIMATION_PLAYER 12     //Vitesse d'affichage des images des animations
@@ -24,6 +25,7 @@ private:
     Player* player;
     Walls* murs;
     Spikes* spikes;
+    SawBlades* sawblades;
 
     int delta_time = 0;  //Temps restant à attendre entre chaque frame
     int current_level = 1;

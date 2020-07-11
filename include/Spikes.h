@@ -10,9 +10,7 @@ class Spikes
 private:
     std::vector<Animation*> spikes;   //Tableau contenant tous les spikes
     SDL_Renderer* Main_Renderer = nullptr;
-    std::vector<bool> deadly ;     //Tableau contenant la donnée qui indique si le spike tue
     Player *player = nullptr;
-    void render();
 public:
     Spikes(SDL_Renderer* _Main_Renderer, Player* _player);
     ~Spikes();

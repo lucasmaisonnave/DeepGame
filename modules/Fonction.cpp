@@ -43,16 +43,49 @@ query_texture_fail:
     return SDL_DisplayFormatAlpha(surface_a_copier);
 }*/
 
-SDL_bool SDL_IntersectionCircleRect(SDL_Rect* _rect, SDL_Circle* _circle)
+bool SDL_IntersectionCircleRect(SDL_Rect* _rect, SDL_Circle* _circle)
 {
-    SDL_Point p = {_circle->x, _circle->y};
-    SDL_Point rect_center = {_rect->x + _rect->w/2, _rect->y + _rect->h/2};
-    return( SDL_PointInRect(&p, _rect) || 
-            SDL_PointInCircle(&rect_center, _circle) ||
-            ;
+    int x = _rect->x;
+    int y = _rect->y;
+    int w = _rect->w;
+    int h = _rect->h;
+
+    int a = _circle->x;
+    int b = _circle->y;
+    int r = _circle->r;
+
+    for(int i = 0; i<2; i++)
+    {
+        if(r - std::pow(x + i*w - a,2) >= 0)
+        {
+            if(y <= b + std::sqrt((r - std::pow(x + i*w - a,2))) <= y + h)
+                return SDL_TRUE;
+            if(y <= b - std::sqrt((r - std::pow(x + i*w - a,2))) <= y + h)
+                return SDL_TRUE;
+        }
+    }
+
+    for(int i = 0; i<2; i++)
+    {
+        if(r - std::pow(y + i*h - b,2) >= 0)
+        {
+            if(x <= a + std::sqrt((r - std::pow(y + i*h - b,2))) <= x + w)
+                return SDL_TRUE;
+            if(x <= a - std::sqrt((r - std::pow(y + i*h - b,2))) <= x + w)
+                return SDL_TRUE;
+        }
+    }    
+    return SDL_FALSE;
 }
 
-SDL_bool SDL_PointInCircle(SDL_Point* _point, SDL_Circle* _circle)
+bool SDL_PointInCircle(SDL_Point* _point, SDL_Circle* _circle)
 {
     return (std::pow(_point->x - _circle->x,2) + std::pow(_point->y - _circle->y,2) <= std::pow(_circle->r,2));
+}
+
+int sign(float x)
+{
+    if( x <= 0)
+        return -1;
+    return 1;
 }

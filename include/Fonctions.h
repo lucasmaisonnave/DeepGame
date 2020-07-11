@@ -18,11 +18,15 @@ typedef struct SDL_Circle
 /**
  *  \brief Renvoie True si il y a intersection entre le cercle et le rectangle
 */
-SDL_bool SDL_IntersectionCircleRect(SDL_Rect* _rect, SDL_Circle* _circle);
+bool SDL_IntersectionCircleRect(SDL_Rect* _rect, SDL_Circle* _circle);
 
 /**
  *  \brief Renvoie True si le point est dans le cercle
 */
-SDL_bool SDL_PointInCircle(SDL_Point* _point, SDL_Circle* _circle);
+bool SDL_PointInCircle(SDL_Point* _point, SDL_Circle* _circle);
+/**
+ *  \brief Renvoie le signe du flottant
+*/
+int sign(float x);
 
 #endif
